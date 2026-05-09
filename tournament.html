@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Tournament</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="style.css">
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+
+<body>
+
+<h2 style="text-align:center;">🎮 Tournament Details</h2>
+
+<div id="tourDetail" class="tour-card"></div>
+
+<div class="tour-card" id="statusBox"></div>
+
+<div class="tour-card" id="roomBox"></div>
+
+<h3 style="text-align:center;">👥 Players</h3>
+<div id="players" class="tour-card"></div>
+
+<script src="script.js"></script>
+
+<script>
+
+// URL से ID
+const params = new URLSearchParams(window.location.search);
+const tId = params.get("id");
+
+let currentUser = null;
+
+// AUTH
+firebase.auth().onAuthStateChanged(user=>{
+  if(user){
+    currentUser = user;
+    loadTournament();
+    loadPlayers();
+    checkStatus();
+  }
+});
+
+// 🎮 TOURNAMENT LOAD
+function loadTournament(){
+
+  db.collection("tournaments").doc(tId).get().then(doc=>{
+    
+    if(!doc.exists){
+      document.getElementById("tourDetail").innerHTML = "Tournament not found ❌";
+      return;
+    }
+
+    let t = doc.data();
+
+    document.getElementById("tourDetail").innerHTML = `
+      <img src="${t.img}" width="100%">
+      <h3>${t.name}</h3>
+      <p>${t.type} | ${t.map}</p>
+      <p>Entry: ₹${t.entry}</p>
+      <p>Prize: ₹${t.prize}</p>
+      <p>Per Kill: ₹${t.perKill}</p>
+    `;
+  });
+}
+
+// 👥 PLAYERS LOAD
+function loadPlayers(){
+
+  db.collection("joins")
+  .where("tournament","==",tId)
+  .where("status","==","joined")
+  .onSnapshot(snap=>{
+
+    let html = "";
+    let count = 0;
+
+    snap.forEach(doc=>{
+      let j = doc.data();
+      count++;
+      html += `<p>🎯 ${j.ffname || j.user}</p>`;
+    });
+
+    document.getElementById("players").innerHTML =
+      `<p>Total Players: ${count}</p>` + html;
+  });
+}
+
+// 🔥 STATUS CHECK
+function checkStatus(){
+
+  db.collection("joins")
+  .where("user","==",currentUser.email)
+  .where("tournament","==",tId)
+  .onSnapshot(snap=>{
+
+    if(snap.empty){
+      document.getElementById("statusBox").innerHTML =
+      "❌ You have not joined";
+      return;
+    }
+
+    let data = snap.docs[0].data();
+
+    if(data.status=="pending"){
+      document.getElementById("statusBox").innerHTML =
+      "⏳ Waiting for approval";
+    }
+
+    if(data.status=="joined"){
+
+      document.getElementById("statusBox").innerHTML =
+      "✅ Joined";
+
+      loadRoom();
+    }
+
+    if(data.status=="rejected"){
+      document.getElementById("statusBox").innerHTML =
+      "❌ Rejected";
+    }
+
+  });
+
+}
+
+// 🎮 ROOM LOAD
+function loadRoom(){
+
+  db.collection("tournaments").doc(tId)
+  .onSnapshot(doc=>{
+
+    let t = doc.data();
+
+    if(t.roomId){
+      document.getElementById("roomBox").innerHTML = `
+        <h3>🎮 Room Details</h3>
+        <p>ID: ${t.roomId}</p>
+        <p>Password: ${t.roomPass}</p>
+      `;
+    }
+
+  });
+}
+
+</script>
+
+</body>
+</html>

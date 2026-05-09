@@ -1,0 +1,121 @@
+body{
+  margin:0;
+  background:#0b1c2c;
+  color:white;
+  font-family:Arial;
+}
+
+.center{
+  text-align:center;
+  margin-top:100px;
+}
+
+.header{
+  padding:15px;
+  background:#12263a;
+}
+
+.logout{
+  float:right;
+  cursor:pointer;
+}
+
+.tour-card{
+  background:#12263a;
+  margin:10px;
+  padding:15px;
+  border-radius:15px;
+}
+
+button{
+  width:100%;
+  padding:10px;
+  background:#28a745;
+  border:none;
+  border-radius:10px;
+  color:white;
+}
+
+.bottom-nav{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #111;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  border-top: 2px solid #444;
+}
+
+.bottom-nav button{
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+}
+.profile-card{
+  display:flex;
+  align-items:center;
+  background:#1c2b3a;
+  padding:15px;
+  border-radius:15px;
+  margin:10px;
+}
+
+.avatar{
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  background:#8b6f61;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  margin-right:10px;
+}
+
+.menu-card{
+  display:flex;
+  justify-content:space-between;
+  background:#1c2b3a;
+  padding:15px;
+  margin:10px;
+  border-radius:12px;
+  cursor:pointer;
+}
+
+.logout-btn{
+  width:90%;
+  margin:20px;
+  padding:12px;
+  border:none;
+  background:red;
+  color:white;
+  border-radius:10px;
+  font-size:16px;
+}
+p{
+  background:#1e2a3a;
+  padding:10px;
+  border-radius:8px;
+  margin:8px 0;
+  color:white;
+}
+
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  display:flex;
+  background:#12263a;
+}
+
+.bottom-nav button{
+  flex:1;
+  border:none;
+  padding:12px;
+  background:#12263a;
+  color:white;
+  font-size:14px;
+}

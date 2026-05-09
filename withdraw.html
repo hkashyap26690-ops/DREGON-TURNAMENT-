@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Withdraw</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="style.css">
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<style>
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  display:flex;
+  background:#12263a;
+}
+.bottom-nav button{
+  flex:1;
+  border:none;
+  padding:12px;
+  background:#12263a;
+  color:white;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="loginPage" style="text-align:center; margin-top:80px;">
+  <h2>Login First</h2>
+  <button onclick="login()">Login with Google</button>
+</div>
+
+<!-- WITHDRAW PAGE -->
+<div id="withdrawPage" style="display:none; padding-bottom:60px;">
+
+<h2 style="text-align:center;">💸 Withdraw</h2>
+
+<input id="amount" placeholder="Amount">
+
+<p>📸 Kill Screenshot</p>
+<input type="file" id="killImgW">
+
+<p>💳 QR Code Screenshot</p>
+<input type="file" id="qrImgW">
+
+<p>🆔 Match ID</p>
+<input id="matchIdW" placeholder="1234">
+
+<button id="submitBtn" onclick="Withdraw()">Submit Request</button>
+
+
+<h3>📜 History</h3>
+<div id="withdrawHistory"></div>
+
+</div>
+
+<!-- 🔻 BOTTOM NAV -->
+<div class="bottom-nav">
+  <button onclick="goHome()">🏠 Home</button>
+   
+   <button onclick="goWithdraw()">💸 Withdraw</button>
+  
+  <button onclick="goProfile()">👤 Profile</button>
+  
+  </div>
+  
+<script src="script.js"></script>
+
+<script>
+
+// NAVIGATION
+function goHome(){
+  window.location.href="index.html";
+}
+
+function goWithdraw(){
+  window.location.href="withdraw.html";
+}
+
+function goProfile(){
+  window.location.href="profile.html";
+}
+
+</script>
+
+</body>
+</html>

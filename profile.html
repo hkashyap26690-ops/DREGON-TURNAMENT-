@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Profile</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="style.css">
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<style>
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  display:flex;
+  background:#12263a;
+}
+
+.bottom-nav button{
+  flex:1;
+  border:none;
+  padding:12px;
+  background:#12263a;
+  color:white;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- 🔐 LOGIN -->
+<div id="loginPage" style="text-align:center; margin-top:80px;">
+  <h2>Login First</h2>
+  <button onclick="login()">Login with Google</button>
+</div>
+
+<!-- 👤 PROFILE -->
+<div id="profilePage" style="display:none; padding-bottom:80px;">
+
+<h2 style="text-align:center;">👤 Profile</h2>
+
+<!-- 🔥 TOP PROFILE CARD -->
+<div class="profile-card">
+  <div class="avatar" id="avatar">H</div>
+
+  <div>
+    <h2 id="userName">User Name</h2>
+    <p id="userEmail"></p>
+  </div>
+</div>
+
+<!-- 👤 MY PROFILE -->
+<div class="menu-card" onclick="openEditPage()">
+  <span>👤 My Profile</span>
+  <span>➤</span>
+</div>
+
+<div class="menu-card" onclick="openRulesPage()">
+  <span>📜 Rules</span>
+  <span>➤</span>
+</div>
+
+<!-- 🚪 LOGOUT -->
+<button class="logout-btn" onclick="logout()">Logout</button>
+
+
+<!-- 🔻 BOTTOM NAV -->
+<div class="bottom-nav">
+  <button onclick="goHome()">🏠 Home</button>
+   
+   <button onclick="goWithdraw()">💸 Withdraw</button>
+  
+  <button onclick="goProfile()">👤 Profile</button>
+  
+  
+</div>
+
+<script src="script.js"></script>
+
+<script>
+
+// 🔄 NAVIGATION
+function goHome(){
+  window.location.href = "index.html";
+}
+
+function goWithdraw(){
+  window.location.href = "withdraw.html";
+}
+
+function goProfile(){
+  window.location.href = "profile.html";
+}
+
+</script>
+
+</body>
+</html>

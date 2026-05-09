@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>User Panel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="style.css">
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="loginPage" style="text-align:center; margin-top:80px;">
+  <h2>Login First</h2>
+  <button onclick="login()">Login with Google</button>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none;">
+
+<h2 style="text-align:center;">🎮 Tournaments</h2>
+
+<div style="display:flex; margin:10px;">
+
+  <button
+    onclick="showUpcoming()"
+    id="btnUp"
+    style="flex:1; padding:12px; background:#ff9800; color:white; border:none;">
+    Upcoming
+  </button>
+
+  <button
+    onclick="showCompleted()"
+    id="btnCom"
+    style="flex:1; padding:12px; background:#ccc; border:none;">
+    Completed
+  </button>
+
+</div>
+
+<div id="tournaments"></div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+
+  <button onclick="goHome()">🏠 Home</button>
+
+  <button onclick="goWithdraw()">💸 Withdraw</button>
+
+  <button onclick="goProfile()">👤 Profile</button>
+
+</div>
+
+</div>
+
+<script src="script.js"></script>
+
+<script>
+
+let currentUser = null;
+
+// AUTH
+firebase.auth().onAuthStateChanged(user=>{
+
+  if(user){
+
+    currentUser = user;
+
+    document.getElementById("loginPage").style.display = "none";
+
+    document.getElementById("app").style.display = "block";
+
+    showUpcoming();
+
+  }
+
+  else{
+
+    document.getElementById("loginPage").style.display = "block";
+
+    document.getElementById("app").style.display = "none";
+
+  }
+
+});
+
+// UPCOMING
+function showUpcoming(){
+
+  document.getElementById("btnUp").style.background = "#ff9800";
+
+  document.getElementById("btnCom").style.background = "#ccc";
+
+  db.collection("tournaments").onSnapshot(async (snap)=>{
+
+    let user = firebase.auth().currentUser;
+
+    if(!user) return;
+
+    let html = "";
+
+    for(const doc of snap.docs){
+
+      let t = doc.data();
+
+      // USER JOIN CHECK
+      let joinSnap = await db.collection("joins")
+      .where("tournament","==",doc.id)
+      .where("user","==",user.email)
+      .get();
+
+      // TOTAL JOINED PLAYERS
+      let joinedSnap = await db.collection("joins")
+      .where("tournament","==",doc.id)
+      .where("status","==","joined")
+      .get();
+
+      let count = joinedSnap.size;
+
+      let max = parseInt(t.maxPlayers || 0);
+
+      let alreadyJoined = !joinSnap.empty;
+
+      let btn = "";
+
+      // JOINED
+      if(alreadyJoined){
+
+        btn = `
+        <button
+          onclick="openTour('${doc.id}')"
+          style="background:orange;color:white;">
+
+          Joined ✅
+
+        </button>`;
+
+      }
+
+      // FULL
+      else if(count >= max && max > 0){
+
+        btn = `
+        <button disabled
+          style="background:red;color:white;">
+
+          FULL 🔒
+
+        </button>`;
+
+      }
+
+      // JOIN NOW
+      else{
+
+        btn = `
+        <button onclick="openDeposit('${doc.id}')">
+
+          Join Now
+
+        </button>`;
+
+      }
+
+      html += `
+
+      <div class="tour-card">
+
+        <img
+          src="${t.img}"
+          style="width:100%;border-radius:10px;"
+          onerror="this.style.display='none'">
+
+        <h3>${t.name}</h3>
+
+        <p>🎯 Mode: ${t.type || "Solo"}</p>
+
+        <p>🎮 Map: ${t.map || "N/A"}</p>
+
+        <p>⚙️ Version: ${t.version || "N/A"}</p>
+
+        <p>💰 Entry: ₹${t.entry || 0}</p>
+
+        <p>🏆 Prize: ₹${t.prize || 0}</p>
+
+        <p>☠️ Per Kill: ₹${t.perKill || 0}</p>
+
+        <p>👥 Players: ${count}/${max}</p>
+
+        <p>⏰ Time: ${t.time || "Not Set"}</p>
+
+        ${btn}
+
+      </div>
+
+      `;
+
+    }
+
+    document.getElementById("tournaments").innerHTML = html;
+
+  });
+
+}
+
+// COMPLETED
+function showCompleted(){
+
+  document.getElementById("btnUp").style.background = "#ccc";
+
+  document.getElementById("btnCom").style.background = "#4caf50";
+
+  db.collection("joins")
+  .where("user","==",currentUser.email)
+  .where("status","==","joined")
+  .onSnapshot(async (snap)=>{
+
+    let html = "";
+
+    if(snap.empty){
+
+      html = `
+      <p style="text-align:center;">
+
+        No Matches Played ❌
+
+      </p>`;
+    }
+
+    for(const doc of snap.docs){
+
+      let j = doc.data();
+
+      html += `
+      <div class="tour-card">
+      
+      <h3>🎮 ${j.ffname ||"Player"}</h3>
+
+     <p>🆔 Match ID: ${j.code || "Not Added"}</p>
+
+    <p>☠️ Kills: ${j.kills || 0}</p>
+
+    <p>📌 Status: ${j.status}</p>
+
+</div>
+`;
+      
+    }
+
+    document.getElementById("tournaments").innerHTML = html;
+
+  });
+
+}
+
+// OPEN DEPOSIT
+function openDeposit(id){
+
+  window.location.href = "deposit.html?id=" + id;
+
+}
+
+// OPEN TOURNAMENT
+function openTour(id){
+
+  window.location.href = "tournament.html?id=" + id;
+
+}
+
+// NAVIGATION
+function goHome(){
+
+  window.location.href = "index.html";
+
+}
+
+function goWithdraw(){
+
+  window.location.href = "withdraw.html";
+
+}
+
+function goProfile(){
+
+  window.location.href = "profile.html";
+
+}
+
+</script>
+
+</body>
+</html>

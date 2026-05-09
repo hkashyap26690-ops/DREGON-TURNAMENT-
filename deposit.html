@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Deposit</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+
+<body>
+
+<div id="loginPage">
+  <h2>Login First</h2>
+  <button onclick="login()">Login</button>
+</div>
+
+<div id="app" style="display:none;">
+
+<h2>Deposit Page</h2>
+
+<div id="tourDetails"></div>
+
+<div style="text-align:center; margin-top:20px;">
+
+  <img 
+  src="https://i.postimg.cc/vHB5VtJw/Account-QRCode-Federal-Bank-2954-DARK-THEME-2.jpg"
+  width="220"
+  style="border-radius:10px;">
+
+  <p>📌 Payment करने के बाद screenshot upload करो</p>
+
+<input id="ffname" placeholder="FF Name">
+<input id="ffid" placeholder="FF ID">
+
+<input type="file" id="paymentImg">
+
+<button id="reqBtn">Request Join</button>
+
+<p id="statusText"></p>
+
+</div>
+
+<script src="script.js"></script>
+
+<script>
+
+// =====================
+// 2️⃣ AUTH
+// =====================
+firebase.auth().onAuthStateChanged(user=>{
+  if(user){
+    document.getElementById("loginPage").style.display="none";
+    document.getElementById("app").style.display="block";
+
+    loadTournament();
+
+    setTimeout(()=>{
+      listenStatus(currentId);
+    },500);
+
+  } else {
+    document.getElementById("loginPage").style.display="block";
+    document.getElementById("app").style.display="none";
+  }
+});
+
+
+// =====================
+// 3️⃣ LOAD TOURNAMENT
+// =====================
+async function loadTournament(){
+
+  let doc = await db.collection("tournaments").doc(currentId).get();
+  if(!doc.exists) return;
+
+  let t = doc.data();
+
+  document.getElementById("tourDetails").innerHTML = `
+    <h3>${t.name}</h3>
+    <p>Entry: ₹${t.entry}</p>
+  `;
+}
+
+
+// =====================
+// 4️⃣ LISTENER
+// =====================
+function listenStatus(tournamentId){
+
+  let user = firebase.auth().currentUser;
+  if(!user) return;
+
+  let docId = user.email + "_" + tournamentId;
+
+  db.collection("joins").doc(docId)
+  .onSnapshot(doc=>{
+
+    if(!doc.exists){
+      updateButton("none");
+      return;
+    }
+
+    updateButton(doc.data().status);
+
+  });
+}
+
+
+// =====================
+// 5️⃣ UI
+// =====================
+function updateButton(status){
+
+  let btn = document.getElementById("reqBtn");
+  let txt = document.getElementById("statusText");
+
+  if(status === "pending"){
+
+    btn.innerText = "PENDING ⏳";
+    btn.disabled = true;
+    txt.innerText = "Waiting...";
+
+  }
+
+  else if(status === "joined"){
+
+    btn.innerText = "JOINED ✅";
+    btn.disabled = true;
+
+    txt.innerHTML = `
+      <button onclick="goTour()">
+        Go To Tournament 🎮
+      </button>
+    `;
+
+  }
+
+  else if(status === "rejected"){
+
+    btn.innerText = "REJECTED ❌";
+    btn.disabled = true;
+    txt.innerText = "Rejected";
+
+  }
+
+  else{
+
+    btn.innerText = "Request Join";
+    btn.disabled = false;
+    txt.innerText = "";
+
+  }
+
+}
+
+// =====================
+// 6️⃣ REQUEST JOIN
+// =====================
+document.getElementById("reqBtn").onclick = async ()=>{
+
+  if(!currentId){
+    alert("Tournament not loaded ❌");
+    return;
+  }
+
+  let user = firebase.auth().currentUser;
+  if(!user) return alert("Login required");
+
+  let file = document.getElementById("paymentImg").files[0];
+  let ffname = document.getElementById("ffname").value;
+  let ffid = document.getElementById("ffid").value;
+
+  if(!file || !ffname || !ffid){
+    return alert("Fill all fields ❌");
+  }
+
+  let docId = user.email + "_" + currentId;
+
+  let existing = await db.collection("joins").doc(docId).get();
+  if(existing.exists){
+    return alert("Already Requested ❌");
+  }
+
+  let url = await uploadImage(file);
+  if(!url){
+    return alert("Upload failed ❌");
+  }
+
+  await db.collection("joins").doc(docId).set({
+    tournament: currentId,
+    user: user.email,
+    ffname,
+    ffid,
+    paymentImg: url,
+    status: "pending",
+    time: Date.now()
+  });
+
+  alert("Request Sent ✅");
+};
+
+function goTour(){
+  window.location.href = "tournament.html?id=" + currentId;
+}
+
+</script>
+
+</body>
+</html>
