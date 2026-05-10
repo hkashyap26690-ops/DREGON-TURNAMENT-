@@ -65,7 +65,7 @@ function login(){
 
   let provider = new firebase.auth.GoogleAuthProvider();
 
-  firebase.auth().signInWithPopup(provider)
+  firebase.auth().signInWithRedirect(provider)
   .then((result)=>{
 
     console.log("Login Success ✅");
