@@ -53,12 +53,6 @@ firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
   console.log(error);
 });
 
-const db = firebase.firestore();
-
-const ADMIN_EMAIL = "hk370622@gmail.com";
-
-const currentId = new URLSearchParams(window.location.search).get("id");
-
 
 // 🔐 GOOGLE LOGIN
 function login(){
@@ -70,7 +64,7 @@ function login(){
 
     console.log("Login Success ✅");
 
-    window.location.href = "admin.html";
+    window.location.href = "index.html";
 
   })
   .catch((error)=>{
@@ -96,13 +90,14 @@ firebase.auth().onAuthStateChanged(user => {
   // 🔒 LOGIN PAGE CONTROL
   let loginPage = document.getElementById("loginPage");
   let app = document.getElementById("app");
+  let Homepage = document.getElementById("Homepage");
   let withdrawPage = document.getElementById("withdrawPage");
   let profilePage = document.getElementById("profilePage");
-  let adminPanel = document.getElementById("adminPanel");
-
+  
   if(user){
 
     if(loginPage) loginPage.style.display="none";
+    if(HomePage) HomePage.style.display="block";
     if(app) app.style.display="block";
     if(withdrawPage) withdrawPage.style.display="block";
     if(profilePage) profilePage.style.display="block";
@@ -111,7 +106,7 @@ firebase.auth().onAuthStateChanged(user => {
       adminPanel.style.display="block";
     }
 
-    loadTournaments();
+    
 
     // 👤 PROFILE DATA
     setText("userEmail", user.email);
@@ -161,6 +156,7 @@ if(document.getElementById("withdrawHistory")){
 } else {
 
   if(loginPage) loginPage.style.display = "block";
+  if(HomePage) HomePage.style.display = "none";
   if(app) app.style.display = "none";
   if(withdrawPage) withdrawPage.style.display = "none";
   if(profilePage) profilePage.style.display = "none";
