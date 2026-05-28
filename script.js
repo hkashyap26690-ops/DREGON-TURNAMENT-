@@ -60,13 +60,6 @@ function login(){
   let provider = new firebase.auth.GoogleAuthProvider();
 
   firebase.auth().signInWithRedirect(provider)
-  .then((result)=>{
-
-    console.log("Login Success ✅");
-
-    window.location.href = "index.html";
-
-  })
   .catch((error)=>{
     console.log(error);
     alert(error.message);
@@ -80,8 +73,10 @@ function logout(){
   firebase.auth().signOut()
   .then(()=>{
     alert("Logged out ✅");
-    
   });
+
+}
+
   
 firebase.auth().onAuthStateChanged(user => {
 
