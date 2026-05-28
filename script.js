@@ -98,9 +98,7 @@ firebase.auth().onAuthStateChanged(user => {
     if(withdrawPage) withdrawPage.style.display="block";
     if(profilePage) profilePage.style.display="block";
 
-    window.location.href = "index.html";
-    
-
+  
     loadTournaments();
 
     setText("userEmail", user.email);
@@ -160,11 +158,10 @@ if(document.getElementById("withdrawHistory")){
 
 } else {
 
-  if(loginPage) loginPage.style.display = "block";
-  if(app) app.style.display = "none";
-  if(withdrawPage) withdrawPage.style.display = "none";
-  if(profilePage) profilePage.style.display = "none";
-  if(adminPanel) adminPanel.style.display = "none";
+  if(loginPage) loginPage.style.display="block";
+  if(app) app.style.display="none";
+  if(withdrawPage) withdrawPage.style.display="none";
+  if(profilePage) profilePage.style.display="none";
 
 }
 
@@ -400,23 +397,6 @@ document.getElementById("playersList").innerHTML = html;
 
 }
 
-
-
-// 📦 LOAD TOURNAMENT DROPDOWN
-if(document.getElementById("tId")){
-db.collection("tournaments").onSnapshot(snap=>{
-let html = "<option value=''>Select Tournament</option>";
-
-snap.forEach(doc=>{  
-  let t = doc.data();  
-
-  html += `<option value="${doc.id}">${t.name}</option>`;  
-});  
-
-document.getElementById("tId").innerHTML = html;
-
-});
-}
 
 async function submitResult(){
 
