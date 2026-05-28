@@ -55,8 +55,6 @@ firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
 
 const db = firebase.firestore();
 
-const ADMIN_EMAIL = "hk370622@gmail.com";
-
 const currentId = new URLSearchParams(window.location.search).get("id");
 
 
@@ -69,18 +67,9 @@ function login(){
 
 }
 
-// ✅ LOGIN SUCCESS CHECK
 firebase.auth().getRedirectResult()
-.then((result) => {
-
-  if(result.user){
-    window.location.href = "index.html";
-  }
-
-})
 .catch((error) => {
   console.log(error);
-  alert(error.message);
 });
 
 // 🚪 LOGOUT
