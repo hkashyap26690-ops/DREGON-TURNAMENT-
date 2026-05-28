@@ -229,39 +229,7 @@ if(box){
 }
 
 
-// 📥 LOAD JOIN REQUESTS (ADMIN)
-if (document.getElementById("joins")) {
 
-db.collection("joins").onSnapshot(snap => {
-
-let html = "";  
-
-snap.forEach(doc => {  
-  let j = doc.data();  
-
-  html += `  
-  <div class="tour-card">  
-    <b>${j.user}</b><br>  
-    🎮 ${j.ffname || "N/A"} (${j.ffid || "N/A"})<br>  
-
-    <img src="${j.paymentImg}" width="100%"><br>  
-
-    Status: ${j.status}<br><br>  
-
-    <button onclick="approve('${doc.id}')">Approve</button>  
-    <button onclick="reject('${doc.id}')">Reject</button>  
-  </div>  
-  `;  
-});  
-
-let el = document.getElementById("ID");
-if(el){
-  el.innerHTML = html;
-}
-
-});
-
-}
 
 // ✅ APPROVE
 function approve(id){
@@ -432,51 +400,7 @@ document.getElementById("playersList").innerHTML = html;
 
 }
 
-// 🎮 LOAD ALL TOURNAMENTS ()
-if(document.getElementById("allTournaments")){
-db.collection("tournaments").onSnapshot(snap=>{
-let html = "";
 
-snap.forEach(doc=>{  
-  let t = doc.data();  
-
-  html += `  
-  <div class="tour-card">  
-    <h3>${t.name}</h3>  
-    <p>${t.type} | ${t.map}</p>  
-
-    <button onclick="deleteTournament('${doc.id}')">Delete ❌</button>  
-  </div>  
-  `;  
-});  
-
-document.getElementById("allTournaments").innerHTML = html;
-
-});
-}
-
-let deleting = false;
-
-async function deleteTournament(id){
-if(deleting) return;
-if(!confirm("Delete Tournament?")) return;
-
-deleting = true;
-
-await db.collection("tournaments").doc(id).delete();
-
-let snap = await db.collection("joins")
-.where("tournament","==",id)
-.get();
-
-snap.forEach(doc=>{
-db.collection("joins").doc(doc.id).delete();
-});
-
-alert("Deleted ✅");
-
-deleting = false;
-}
 
 // 📦 LOAD TOURNAMENT DROPDOWN
 if(document.getElementById("tId")){
@@ -522,35 +446,6 @@ time: Date.now()
 alert("Result Submitted ✅");
 }
 
-// 📊 LOAD RESULTS
-if(document.getElementById("resultsAdmin")){
-db.collection("results").onSnapshot(snap=>{
-let html="";
-
-snap.forEach(doc=>{  
-  let r = doc.data();  
-
-  html += `  
-  <div class="tour-card">  
-    <b>${r.user}</b><br>  
-    ID: ${r.matchId}<br>  
-
-    <img src="${r.killImg}" width="100%"><br>  
-    <img src="${r.qrImg}" width="100%"><br>  
-
-    Status: ${r.status}<br><br>  
-
-    <button onclick="updateResult('${doc.id}','success')">Success ✅</button>  
-    <button onclick="updateResult('${doc.id}','rejected')">Reject ❌</button>  
-    <button onclick="deleteResult('${doc.id}')">Delete 🗑️</button>  
-  </div>  
-  `;  
-});  
-
-document.getElementById("resultsAdmin").innerHTML = html;
-
-});
-}
 
 function updateResult(id,status){
 db.collection("results").doc(id).update({status});
@@ -560,39 +455,7 @@ function deleteResult(id){
 db.collection("results").doc(id).delete();
 }
 
-// 💸 WITHDRAW ADMIN CONTROL (FINAL)
-if(document.getElementById("withdrawAdmin")){
-db.collection("withdraw").onSnapshot(snap=>{
-let html="";
 
-snap.forEach(doc=>{  
-  let w = doc.data();  
-
-  html += `  
-  <div class="tour-card">  
-    <b>${w.user}</b><br>  
-    ₹${w.amount}<br>  
-    ID: ${w.matchId}<br>  
-
-    <p>📸 Kill</p>  
-    <img src="${w.killImg}" width="100%"><br>  
-
-    <p>💳 QR</p>  
-    <img src="${w.qrImg}" width="100%"><br>  
-
-    Status: ${w.status}<br><br>  
-
-    <button onclick="updateWithdraw('${doc.id}','success')">Success ✅</button>  
-    <button onclick="updateWithdraw('${doc.id}','rejected')">Reject ❌</button>  
-    <button onclick="deleteWithdraw('${doc.id}')">Delete 🗑️</button>  
-  </div>  
-  `;  
-});  
-
-document.getElementById("withdrawAdmin").innerHTML = html;
-
-});
-} 
 
 function updateWithdraw(id,status){
 db.collection("withdraw").doc(id).update({status});
