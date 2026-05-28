@@ -65,13 +65,23 @@ function login(){
 
   let provider = new firebase.auth.GoogleAuthProvider();
 
-  firebase.auth().signInWithRedirect(provider)
-  .catch((error)=>{
-    console.log(error);
-    alert(error.message);
-  });
+  firebase.auth().signInWithRedirect(provider);
 
 }
+
+// ✅ LOGIN SUCCESS CHECK
+firebase.auth().getRedirectResult()
+.then((result) => {
+
+  if(result.user){
+    window.location.href = "index.html";
+  }
+
+})
+.catch((error) => {
+  console.log(error);
+  alert(error.message);
+});
 
 // 🚪 LOGOUT
 function logout(){
