@@ -92,7 +92,10 @@ firebase.auth().onAuthStateChanged(user => {
   if(user){
 
     if(loginPage) loginPage.style.display="none";
-    if(app) app.style.display="block";
+    if(app){
+  app.style.display = "block";
+  console.log("APP OPENED");
+    }
     if(withdrawPage) withdrawPage.style.display="block";
     if(profilePage) profilePage.style.display="block";
 
