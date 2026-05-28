@@ -96,17 +96,6 @@ firebase.auth().onAuthStateChanged(user => {
     if(app) app.style.display="block";
     if(withdrawPage) withdrawPage.style.display="block";
     if(profilePage) profilePage.style.display="block";
-
-  }else{
-
-    if(loginPage) loginPage.style.display="block";
-    if(app) app.style.display="none";
-    if(withdrawPage) withdrawPage.style.display="none";
-    if(profilePage) profilePage.style.display="none";
-
-  }
-
-});
 }
 
     // 👤 PROFILE DATA
