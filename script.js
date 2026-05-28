@@ -65,20 +65,14 @@ function login(){
 
   let provider = new firebase.auth.GoogleAuthProvider();
 
-  firebase.auth().signInWithPopup(provider)
-  .then((result)=>{
-
-    console.log("Login Success ✅");
-
-    window.location.href = "admin.html";
-
-  })
+  firebase.auth().signInWithRedirect(provider)
   .catch((error)=>{
     console.log(error);
     alert(error.message);
   });
 
 }
+
 
 // 🚪 LOGOUT
 function logout(){
@@ -90,15 +84,12 @@ function logout(){
 
 }
 
-
 firebase.auth().onAuthStateChanged(user => {
 
-  // 🔒 LOGIN PAGE CONTROL
   let loginPage = document.getElementById("loginPage");
   let app = document.getElementById("app");
   let withdrawPage = document.getElementById("withdrawPage");
   let profilePage = document.getElementById("profilePage");
-  let adminPanel = document.getElementById("adminPanel");
 
   if(user){
 
@@ -107,24 +98,30 @@ firebase.auth().onAuthStateChanged(user => {
     if(withdrawPage) withdrawPage.style.display="block";
     if(profilePage) profilePage.style.display="block";
 
-    if(user.email === ADMIN_EMAIL && adminPanel){
-      adminPanel.style.display="block";
-    }
-
     loadTournaments();
 
-    // 👤 PROFILE DATA
     setText("userEmail", user.email);
-    
-    // 👤 USER NAME (LOCAL STORAGE)
-let name = localStorage.getItem("name") || "Player";
-setText("userName", name);
 
-// 🅰️ AVATAR FIRST LETTER
-let avatar = document.getElementById("avatar");
-if(avatar){
-  avatar.innerText = name.charAt(0).toUpperCase();
-}
+    let name = localStorage.getItem("name") || "Player";
+    setText("userName", name);
+
+    let avatar = document.getElementById("avatar");
+
+    if(avatar){
+      avatar.innerText = name.charAt(0).toUpperCase();
+    }
+
+  } else {
+
+    if(loginPage) loginPage.style.display="block";
+    if(app) app.style.display="none";
+    if(withdrawPage) withdrawPage.style.display="none";
+    if(profilePage) profilePage.style.display="none";
+
+  }
+
+});
+
     
     
 // 💸 WITHDRAW HISTORY (REAL TIME)
