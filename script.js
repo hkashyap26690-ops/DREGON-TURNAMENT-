@@ -73,7 +73,6 @@ function login(){
 
 }
 
-
 // 🚪 LOGOUT
 function logout(){
 
@@ -112,27 +111,10 @@ firebase.auth().onAuthStateChanged(user => {
       avatar.innerText = name.charAt(0).toUpperCase();
     }
 
-  } else {
-
-    if(loginPage) loginPage.style.display="block";
-    if(app) app.style.display="none";
-    if(withdrawPage) withdrawPage.style.display="none";
-    if(profilePage) profilePage.style.display="none";
-
-  }
-
-});
-
-    
-    
-// 💸 WITHDRAW HISTORY (REAL TIME)
-let withdrawUnsub = null;
-
+    // 💸 WITHDRAW HISTORY
 if(document.getElementById("withdrawHistory")){
 
-  if(withdrawUnsub) withdrawUnsub();
-
-  withdrawUnsub = db.collection("withdraw")
+  db.collection("withdraw")
   .where("user","==",user.email)
   .onSnapshot(snap => {
 
@@ -156,16 +138,18 @@ if(document.getElementById("withdrawHistory")){
 
 }
 
-} else {
+  } else {
 
-  if(loginPage) loginPage.style.display="block";
-  if(app) app.style.display="none";
-  if(withdrawPage) withdrawPage.style.display="none";
-  if(profilePage) profilePage.style.display="none";
+    if(loginPage) loginPage.style.display="block";
+    if(app) app.style.display="none";
+    if(withdrawPage) withdrawPage.style.display="none";
+    if(profilePage) profilePage.style.display="none";
 
-}
+  }
 
 });
+
+  
 
 // 📦 LOAD TOURNAMENTS
 function loadTournaments(){
