@@ -98,6 +98,9 @@ firebase.auth().onAuthStateChanged(user => {
     if(withdrawPage) withdrawPage.style.display="block";
     if(profilePage) profilePage.style.display="block";
 
+    window.location.href = "index.html";
+    
+
     loadTournaments();
 
     setText("userEmail", user.email);
