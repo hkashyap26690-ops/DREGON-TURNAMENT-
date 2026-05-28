@@ -80,33 +80,34 @@ function logout(){
   firebase.auth().signOut()
   .then(()=>{
     alert("Logged out ✅");
+    
   });
-
-}
-
-
+  
 firebase.auth().onAuthStateChanged(user => {
 
-  // 🔒 LOGIN PAGE CONTROL
   let loginPage = document.getElementById("loginPage");
   let app = document.getElementById("app");
-  let Homepage = document.getElementById("Homepage");
   let withdrawPage = document.getElementById("withdrawPage");
   let profilePage = document.getElementById("profilePage");
-  
+
   if(user){
 
     if(loginPage) loginPage.style.display="none";
-    if(HomePage) HomePage.style.display="block";
     if(app) app.style.display="block";
     if(withdrawPage) withdrawPage.style.display="block";
     if(profilePage) profilePage.style.display="block";
 
-    if(user.email === ADMIN_EMAIL && adminPanel){
-      adminPanel.style.display="block";
-    }
+  }else{
 
-    
+    if(loginPage) loginPage.style.display="block";
+    if(app) app.style.display="none";
+    if(withdrawPage) withdrawPage.style.display="none";
+    if(profilePage) profilePage.style.display="none";
+
+  }
+
+});
+}
 
     // 👤 PROFILE DATA
     setText("userEmail", user.email);
@@ -156,12 +157,10 @@ if(document.getElementById("withdrawHistory")){
 } else {
 
   if(loginPage) loginPage.style.display = "block";
-  if(HomePage) HomePage.style.display = "none";
   if(app) app.style.display = "none";
   if(withdrawPage) withdrawPage.style.display = "none";
   if(profilePage) profilePage.style.display = "none";
-  if(adminPanel) adminPanel.style.display = "none";
-
+  
 }
 
 });
@@ -259,103 +258,8 @@ time: Date.now()
 alert("Request Sent ✅");
 }
 
-// 📥 LOAD JOIN REQUESTS (ADMIN)
-if (document.getElementById("joins")) {
+// ✅
 
-db.collection("joins").onSnapshot(snap => {
-
-let html = "";  
-
-snap.forEach(doc => {  
-  let j = doc.data();  
-
-  html += `  
-  <div class="tour-card">  
-    <b>${j.user}</b><br>  
-    🎮 ${j.ffname || "N/A"} (${j.ffid || "N/A"})<br>  
-
-    <img src="${j.paymentImg}" width="100%"><br>  
-
-    Status: ${j.status}<br><br>  
-
-    <button onclick="approve('${doc.id}')">Approve</button>  
-    <button onclick="reject('${doc.id}')">Reject</button>  
-  </div>  
-  `;  
-});  
-
-let el = document.getElementById("ID");
-if(el){
-  el.innerHTML = html;
-}
-
-});
-
-}
-
-// ✅ APPROVE
-function approve(id){
-db.collection("joins").doc(id).update({ status:"joined" });
-}
-
-// ❌ REJECT
-function reject(id){
-db.collection("joins").doc(id).update({ status:"rejected" });
-}
-
-// 🗑 DELETE JOIN
-function deleteJoin(id){
-db.collection("joins").doc(id).delete();
-}
-
-// 🎮 ADD ROOM
-function addRoom(){
-let id = document.getElementById("tId").value;
-
-if(!id){
-alert("Select Tournament ❌");
-return;
-}
-
-db.collection("tournaments").doc(id).update({
-roomId: document.getElementById("roomId").value,
-roomPass: document.getElementById("roomPass").value
-});
-
-alert("Room Added ✅");
-}
-
-function addTournament(){
-
-  let name = document.getElementById("name").value;
-  let img = document.getElementById("img").value;
-  let type = document.getElementById("type").value;
-  let version = document.getElementById("version").value;
-  let map = document.getElementById("map").value;
-
-  if(!name || !img || !type || !version || !map){
-    alert("Fill all fields ❌");
-    return;
-  }
-
-  db.collection("tournaments").add({
-    name,
-    img,
-    type,
-    version,
-    map,
-    entry: document.getElementById("entry").value,
-    prize: document.getElementById("prize").value,
-    perKill: document.getElementById("perkill").value,
-    maxPlayers: parseInt(document.getElementById("max").value),
-    roomId: "",
-    roomPass: "",
-    time: document.getElementById("time").value
-  }).then(()=>{
-    alert("Tournament Added ✅");
-  });
-
-}  
 
 // 🎯 RESULT ADMIN
 
