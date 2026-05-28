@@ -77,7 +77,6 @@ function logout(){
 
 }
 
-  
 firebase.auth().onAuthStateChanged(user => {
 
   let loginPage = document.getElementById("loginPage");
@@ -87,67 +86,67 @@ firebase.auth().onAuthStateChanged(user => {
 
   if(user){
 
-    if(loginPage) loginPage.style.display="none";
-    if(app) app.style.display="block";
-    if(withdrawPage) withdrawPage.style.display="block";
-    if(profilePage) profilePage.style.display="block";
-}
+    if(loginPage) loginPage.style.display = "none";
+    if(app) app.style.display = "block";
+    if(withdrawPage) withdrawPage.style.display = "block";
+    if(profilePage) profilePage.style.display = "block";
 
     // 👤 PROFILE DATA
     setText("userEmail", user.email);
-    
-    // 👤 USER NAME (LOCAL STORAGE)
-let name = localStorage.getItem("name") || "Player";
-setText("userName", name);
 
-// 🅰️ AVATAR FIRST LETTER
-let avatar = document.getElementById("avatar");
-if(avatar){
-  avatar.innerText = name.charAt(0).toUpperCase();
-}
-    
-    
-// 💸 WITHDRAW HISTORY (REAL TIME)
-let withdrawUnsub = null;
+    // 👤 USER NAME
+    let name = localStorage.getItem("name") || "Player";
+    setText("userName", name);
 
-if(document.getElementById("withdrawHistory")){
+    // 🅰️ AVATAR
+    let avatar = document.getElementById("avatar");
 
-  if(withdrawUnsub) withdrawUnsub();
+    if(avatar){
+      avatar.innerText = name.charAt(0).toUpperCase();
+    }
 
-  withdrawUnsub = db.collection("withdraw")
-  .where("user","==",user.email)
-  .onSnapshot(snap => {
+    // 📦 LOAD TOURNAMENTS
+    loadTournaments();
 
-    let html = "";
+    // 💸 WITHDRAW HISTORY
+    let box = document.getElementById("withdrawHistory");
 
-    snap.forEach(doc => {
+    if(box){
 
-      let w = doc.data();
+      db.collection("withdraw")
+      .where("user","==",user.email)
+      .onSnapshot(snap => {
 
-      html += `
-        <div class="tour-card">
-          ₹${w.amount} - ${w.status}
-        </div>
-      `;
+        let html = "";
 
-    });
+        snap.forEach(doc => {
 
-    document.getElementById("withdrawHistory").innerHTML = html;
+          let w = doc.data();
 
-  });
+          html += `
+          <div class="tour-card">
+            ₹${w.amount} - ${w.status}
+          </div>
+          `;
+        });
 
-}
+        box.innerHTML = html;
 
-} else {
+      });
 
-  if(loginPage) loginPage.style.display = "block";
-  if(app) app.style.display = "none";
-  if(withdrawPage) withdrawPage.style.display = "none";
-  if(profilePage) profilePage.style.display = "none";
-  
-}
+    }
 
-});
+  }else{
+
+    if(loginPage) loginPage.style.display = "block";
+    if(app) app.style.display = "none";
+    if(withdrawPage) withdrawPage.style.display = "none";
+    if(profilePage) profilePage.style.display = "none";
+
+  }
+
+});  
+
 
 // 📦 LOAD TOURNAMENTS
 function loadTournaments(){
