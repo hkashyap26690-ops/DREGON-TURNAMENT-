@@ -107,25 +107,11 @@ firebase.auth().onAuthStateChanged(user => {
     if(withdrawPage) withdrawPage.style.display="block";
     if(profilePage) profilePage.style.display="block";
 
-  
-    loadTournaments();
-
-    setText("userEmail", user.email);
-
-    let name = localStorage.getItem("name") || "Player";
-    setText("userName", name);
-
-    let avatar = document.getElementById("avatar");
-
-    if(avatar){
-      avatar.innerText = name.charAt(0).toUpperCase();
-    }
-
     // 💸 WITHDRAW HISTORY
 if(document.getElementById("withdrawHistory")){
 
   db.collection("withdraw")
-  .where("user","==",user.email)
+  .where("user","==", user.email)
   .onSnapshot(snap => {
 
     let html = "";
@@ -147,6 +133,20 @@ if(document.getElementById("withdrawHistory")){
   });
 
 }
+
+  
+    loadTournaments();
+
+    setText("userEmail", user.email);
+
+    let name = localStorage.getItem("name") || "Player";
+    setText("userName", name);
+
+    let avatar = document.getElementById("avatar");
+
+    if(avatar){
+      avatar.innerText = name.charAt(0).toUpperCase();
+    }
 
   } else {
 
