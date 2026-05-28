@@ -53,13 +53,26 @@ firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
   console.log(error);
 });
 
+const db = firebase.firestore();
+
+const ADMIN_EMAIL = "hk370622@gmail.com";
+
+const currentId = new URLSearchParams(window.location.search).get("id");
+
 
 // 🔐 GOOGLE LOGIN
 function login(){
 
   let provider = new firebase.auth.GoogleAuthProvider();
 
-  firebase.auth().signInWithRedirect(provider)
+  firebase.auth().signInWithPopup(provider)
+  .then((result)=>{
+
+    console.log("Login Success ✅");
+
+    window.location.href = "admin.html";
+
+  })
   .catch((error)=>{
     console.log(error);
     alert(error.message);
@@ -77,76 +90,85 @@ function logout(){
 
 }
 
+
 firebase.auth().onAuthStateChanged(user => {
 
+  // 🔒 LOGIN PAGE CONTROL
   let loginPage = document.getElementById("loginPage");
   let app = document.getElementById("app");
   let withdrawPage = document.getElementById("withdrawPage");
   let profilePage = document.getElementById("profilePage");
+  let adminPanel = document.getElementById("adminPanel");
 
   if(user){
 
-    if(loginPage) loginPage.style.display = "none";
-    if(app) app.style.display = "block";
-    if(withdrawPage) withdrawPage.style.display = "block";
-    if(profilePage) profilePage.style.display = "block";
+    if(loginPage) loginPage.style.display="none";
+    if(app) app.style.display="block";
+    if(withdrawPage) withdrawPage.style.display="block";
+    if(profilePage) profilePage.style.display="block";
+
+    if(user.email === ADMIN_EMAIL && adminPanel){
+      adminPanel.style.display="block";
+    }
+
+    loadTournaments();
 
     // 👤 PROFILE DATA
     setText("userEmail", user.email);
+    
+    // 👤 USER NAME (LOCAL STORAGE)
+let name = localStorage.getItem("name") || "Player";
+setText("userName", name);
 
-    // 👤 USER NAME
-    let name = localStorage.getItem("name") || "Player";
-    setText("userName", name);
+// 🅰️ AVATAR FIRST LETTER
+let avatar = document.getElementById("avatar");
+if(avatar){
+  avatar.innerText = name.charAt(0).toUpperCase();
+}
+    
+    
+// 💸 WITHDRAW HISTORY (REAL TIME)
+let withdrawUnsub = null;
 
-    // 🅰️ AVATAR
-    let avatar = document.getElementById("avatar");
+if(document.getElementById("withdrawHistory")){
 
-    if(avatar){
-      avatar.innerText = name.charAt(0).toUpperCase();
-    }
+  if(withdrawUnsub) withdrawUnsub();
 
-    // 📦 LOAD TOURNAMENTS
-    loadTournaments();
+  withdrawUnsub = db.collection("withdraw")
+  .where("user","==",user.email)
+  .onSnapshot(snap => {
 
-    // 💸 WITHDRAW HISTORY
-    let box = document.getElementById("withdrawHistory");
+    let html = "";
 
-    if(box){
+    snap.forEach(doc => {
 
-      db.collection("withdraw")
-      .where("user","==",user.email)
-      .onSnapshot(snap => {
+      let w = doc.data();
 
-        let html = "";
+      html += `
+        <div class="tour-card">
+          ₹${w.amount} - ${w.status}
+        </div>
+      `;
 
-        snap.forEach(doc => {
+    });
 
-          let w = doc.data();
+    document.getElementById("withdrawHistory").innerHTML = html;
 
-          html += `
-          <div class="tour-card">
-            ₹${w.amount} - ${w.status}
-          </div>
-          `;
-        });
+  });
 
-        box.innerHTML = html;
+}
 
-      });
+} else {
 
-    }
+  if(loginPage) loginPage.style.display = "block";
+  if(app) app.style.display = "none";
+  if(withdrawPage) withdrawPage.style.display = "none";
+  if(profilePage) profilePage.style.display = "none";
+  if(adminPanel) adminPanel.style.display = "none";
 
-  }else{
+}
 
-    if(loginPage) loginPage.style.display = "block";
-    if(app) app.style.display = "none";
-    if(withdrawPage) withdrawPage.style.display = "none";
-    if(profilePage) profilePage.style.display = "none";
-
-  }
-
-});  
-
+});
 
 // 📦 LOAD TOURNAMENTS
 function loadTournaments(){
@@ -241,8 +263,103 @@ time: Date.now()
 alert("Request Sent ✅");
 }
 
-// ✅
+// 📥 LOAD JOIN REQUESTS (ADMIN)
+if (document.getElementById("joins")) {
 
+db.collection("joins").onSnapshot(snap => {
+
+let html = "";  
+
+snap.forEach(doc => {  
+  let j = doc.data();  
+
+  html += `  
+  <div class="tour-card">  
+    <b>${j.user}</b><br>  
+    🎮 ${j.ffname || "N/A"} (${j.ffid || "N/A"})<br>  
+
+    <img src="${j.paymentImg}" width="100%"><br>  
+
+    Status: ${j.status}<br><br>  
+
+    <button onclick="approve('${doc.id}')">Approve</button>  
+    <button onclick="reject('${doc.id}')">Reject</button>  
+  </div>  
+  `;  
+});  
+
+let el = document.getElementById("ID");
+if(el){
+  el.innerHTML = html;
+}
+
+});
+
+}
+
+// ✅ APPROVE
+function approve(id){
+db.collection("joins").doc(id).update({ status:"joined" });
+}
+
+// ❌ REJECT
+function reject(id){
+db.collection("joins").doc(id).update({ status:"rejected" });
+}
+
+// 🗑 DELETE JOIN
+function deleteJoin(id){
+db.collection("joins").doc(id).delete();
+}
+
+// 🎮 ADD ROOM
+function addRoom(){
+let id = document.getElementById("tId").value;
+
+if(!id){
+alert("Select Tournament ❌");
+return;
+}
+
+db.collection("tournaments").doc(id).update({
+roomId: document.getElementById("roomId").value,
+roomPass: document.getElementById("roomPass").value
+});
+
+alert("Room Added ✅");
+}
+
+function addTournament(){
+
+  let name = document.getElementById("name").value;
+  let img = document.getElementById("img").value;
+  let type = document.getElementById("type").value;
+  let version = document.getElementById("version").value;
+  let map = document.getElementById("map").value;
+
+  if(!name || !img || !type || !version || !map){
+    alert("Fill all fields ❌");
+    return;
+  }
+
+  db.collection("tournaments").add({
+    name,
+    img,
+    type,
+    version,
+    map,
+    entry: document.getElementById("entry").value,
+    prize: document.getElementById("prize").value,
+    perKill: document.getElementById("perkill").value,
+    maxPlayers: parseInt(document.getElementById("max").value),
+    roomId: "",
+    roomPass: "",
+    time: document.getElementById("time").value
+  }).then(()=>{
+    alert("Tournament Added ✅");
+  });
+
+}  
 
 // 🎯 RESULT ADMIN
 
@@ -509,7 +626,7 @@ snap.forEach(doc=>{
 document.getElementById("withdrawAdmin").innerHTML = html;
 
 });
-}
+} 
 
 function updateWithdraw(id,status){
 db.collection("withdraw").doc(id).update({status});
