@@ -228,40 +228,6 @@ if(box){
 
 }
 
-async function sendRequest(id){
-
-let user = firebase.auth().currentUser;
-
-if(!user){
-  alert("Login required ❌");
-  return;
-}
-
-let file = document.getElementById("paymentImg").files[0];
-let ffname = document.getElementById("ffname").value;
-let ffid = document.getElementById("ffid").value;
-
-if(!file || !ffname || !ffid){
-alert("Fill all fields ❌");
-return;
-}
-
-let imgUrl = await uploadImage(file);
-
-await db.collection("joins").add({
-tournament: id,
-user: user.email,   // 👈 user email
-ffname: ffname,     // 👈 Free Fire Name
-ffid: ffid,         // 👈 Free Fire ID
-paymentImg: imgUrl,
-status: "pending",
-kills: 0,
-code: "",
-time: Date.now()
-});
-
-alert("Request Sent ✅");
-}
 
 // 📥 LOAD JOIN REQUESTS (ADMIN)
 if (document.getElementById("joins")) {
