@@ -58,27 +58,29 @@ const db = firebase.firestore();
 const currentId = new URLSearchParams(window.location.search).get("id");
 
 
+// Auth reference
+const auth = firebase.auth();
+
 // 🔐 GOOGLE LOGIN
 function login(){
-
-  let provider = new firebase.auth.GoogleAuthProvider();
-
-  firebase.auth().signInWithRedirect(provider);
-
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithRedirect(provider);
 }
 
-firebase.auth().getRedirectResult()
+// Redirect result handle
+auth.getRedirectResult()
 .then((result) => {
 
-  if(result.user){
+  if (result && result.user) {
+    console.log(result.user);
     window.location.href = "home.html";
   }
 
 })
 .catch((error) => {
   console.log(error);
+  alert(error.message);
 });
-
 
 // 🚪 LOGOUT
 function logout(){
