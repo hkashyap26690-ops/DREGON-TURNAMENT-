@@ -89,15 +89,23 @@ firebase.auth().onAuthStateChanged(user => {
   let withdrawPage = document.getElementById("withdrawPage");
   let profilePage = document.getElementById("profilePage");
 
-  if(user){
+  
 
-    if(loginPage) loginPage.style.display="none";
-    if(app){
-  app.style.display = "block";
-  console.log("APP OPENED");
+    if(user){
+
+    console.log("USER LOGIN SUCCESS");
+
+    let loginPage = document.getElementById("loginPage");
+    let app = document.getElementById("app");
+
+    if(loginPage){
+      loginPage.style.display = "none";
     }
-    if(withdrawPage) withdrawPage.style.display="block";
-    if(profilePage) profilePage.style.display="block";
+
+    if(app){
+      app.style.display = "block";
+    }
+
 
     // 💸 WITHDRAW HISTORY
 if(document.getElementById("withdrawHistory")){
