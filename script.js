@@ -71,13 +71,14 @@ firebase.auth().getRedirectResult()
 .then((result) => {
 
   if(result.user){
-    window.location.href = "index.html";
+    window.location.href = "home.html";
   }
 
 })
 .catch((error) => {
   console.log(error);
 });
+
 
 // 🚪 LOGOUT
 function logout(){
@@ -447,7 +448,7 @@ db.collection("withdraw").doc(id).delete();
 }
 
 function goHome(){
-window.location.href = "index.html";
+window.location.href = "home.html";
 }
 
 function goWithdraw(){
@@ -529,18 +530,8 @@ if(document.getElementById("tournamentSelect")){
   });
 }
 
-function goAdminHome(){
-window.location.href = "admin.html";
-}
 
 
-function openAdminJoins(){
-window.location.href = "admin-joins.html";
-}
-
-function openAdminWithdraw(){
-window.location.href = "admin-withdraw.html";
-}
 
 async function Withdraw(){
 
