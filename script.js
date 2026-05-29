@@ -64,17 +64,18 @@ const auth = firebase.auth();
 // 🔐 GOOGLE LOGIN
 function login(){
   const provider = new firebase.auth.GoogleAuthProvider();
-
-  firebase.auth().signInWithPopup(provider)
-  .then((result) => {
-    console.log(result.user);
-    alert("Login success: " + result.user.displayName);
-  })
-  .catch((error) => {
-    console.log(error);
-    alert(error.message);
-  });
+  firebase.auth().signInWithRedirect(provider);
 }
+
+firebase.auth().getRedirectResult()
+.then((result) => {
+  if(result.user){
+    window.location.href = "home.html";
+  }
+})
+.catch((error) => {
+  console.log(error);
+});
 
 // 🚪 LOGOUT
 function logout(){
