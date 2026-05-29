@@ -64,13 +64,15 @@ firebase.auth().onAuthStateChanged(user=>{
 
   if(user){
 
-    currentUser = user;
+  currentUser = user;
 
-    document.getElementById("loginPage").style.display = "none";
+  let app = document.getElementById("app");
 
-    document.getElementById("app").style.display = "block";
+  if(app){
+    app.style.display = "block";
+  }
 
-    showUpcoming();
+  showUpcoming();
 
   }
 
