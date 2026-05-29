@@ -68,6 +68,13 @@ function login(){
 }
 
 firebase.auth().getRedirectResult()
+.then((result) => {
+
+  if(result.user){
+    window.location.href = "index.html";
+  }
+
+})
 .catch((error) => {
   console.log(error);
 });
