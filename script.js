@@ -63,19 +63,32 @@ const auth = firebase.auth();
 
 // 🔐 GOOGLE LOGIN
 function login(){
-  const provider = new firebase.auth.GoogleAuthProvider();
-  firebase.auth().signInWithRedirect(provider);
-}
 
-firebase.auth().getRedirectResult()
-.then((result) => {
-  if(result.user){
-    window.location.href = "home.html";
-  }
-})
-.catch((error) => {
-  console.log(error);
-});
+  const provider = new firebase.auth.GoogleAuthProvider();
+
+  firebase.auth().signInWithPopup(provider)
+
+  .then((result) => {
+
+    console.log("LOGIN SUCCESS");
+
+    // session save hone do
+    setTimeout(() => {
+
+      window.location.href = "home.html";
+
+    }, 1500);
+
+  })
+
+  .catch((error) => {
+
+    console.log(error);
+    alert(error.message);
+
+  });
+
+}
 
 // 🚪 LOGOUT
 function logout(){
