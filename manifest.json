@@ -5,6 +5,7 @@
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#ff6600",
+  "description": "Free Fire Tournament Platform by DREGON",
   "icons": [
     {
       "src": "icon-512.png",
