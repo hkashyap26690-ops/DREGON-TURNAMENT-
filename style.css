@@ -1,116 +1,487 @@
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,
 body{
   margin:0;
-  background:#0b1c2c;
-  color:white;
-  font-family:Arial;
+  padding:0;
+  min-height:100%;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(255,102,0,.14), transparent 30%),
+    radial-gradient(circle at 90% 30%, rgba(0,180,255,.10), transparent 28%),
+    #05070b;
+  color:#fff;
+  font-family:Arial,Helvetica,sans-serif;
+  overflow-x:hidden;
 }
 
-.center{
-  text-align:center;
-  margin-top:100px;
+body{
+  padding-bottom:90px;
 }
+
+/* =========================
+   HEADER
+========================= */
 
 .header{
-  padding:15px;
-  background:#12263a;
+  position:sticky;
+  top:0;
+  z-index:1000;
+
+  padding:17px 15px;
+
+  background:rgba(8,10,15,.88);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+
+  border-bottom:1px solid rgba(255,102,0,.25);
+
+  box-shadow:
+    0 5px 25px rgba(0,0,0,.45),
+    0 1px 15px rgba(255,102,0,.08);
+}
+
+.header h1,
+.header h2{
+  margin:0;
+  text-align:center;
+  color:#ff7417;
+  letter-spacing:.5px;
+  text-shadow:0 0 15px rgba(255,102,0,.45);
 }
 
 .logout{
   float:right;
+  color:#ff5555;
+  font-weight:bold;
   cursor:pointer;
 }
 
+/* =========================
+   CENTER
+========================= */
+
+.center{
+  text-align:center;
+  margin:70px 15px 30px;
+}
+
+.center h1,
+.center h2{
+  color:#ff7417;
+  text-shadow:0 0 18px rgba(255,102,0,.4);
+}
+
+/* =========================
+   TOURNAMENT / ADMIN CARD
+========================= */
+
 .tour-card{
-  background:#12263a;
-  margin:10px;
-  padding:15px;
-  border-radius:15px;
+  position:relative;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(25,29,38,.96),
+      rgba(10,12,17,.96)
+    );
+
+  margin:14px 10px;
+  padding:18px;
+
+  border-radius:18px;
+
+  border:1px solid rgba(255,255,255,.07);
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.45),
+    inset 0 1px 0 rgba(255,255,255,.04);
+
+  transition:
+    transform .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease;
 }
 
-button{
-  width:100%;
-  padding:10px;
-  background:#28a745;
-  border:none;
-  border-radius:10px;
-  color:white;
+.tour-card:hover{
+  transform:translateY(-2px);
+
+  border-color:rgba(255,102,0,.45);
+
+  box-shadow:
+    0 12px 35px rgba(0,0,0,.55),
+    0 0 22px rgba(255,102,0,.12);
 }
 
-.bottom-nav button{
-  background: none;
-  border: none;
-  color: white;
-  font-size: 16px;
+.tour-card::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:15px;
+  bottom:15px;
+
+  width:3px;
+
+  border-radius:5px;
+
+  background:#ff6600;
+
+  box-shadow:0 0 12px rgba(255,102,0,.7);
 }
+
+/* =========================
+   PROFILE
+========================= */
+
 .profile-card{
   display:flex;
   align-items:center;
-  background:#1c2b3a;
-  padding:15px;
-  border-radius:15px;
-  margin:10px;
+
+  margin:14px 10px;
+  padding:18px;
+
+  background:rgba(18,21,29,.9);
+
+  border:1px solid rgba(255,255,255,.07);
+
+  border-radius:18px;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.4),
+    inset 0 1px 0 rgba(255,255,255,.04);
 }
 
 .avatar{
-  width:60px;
-  height:60px;
+  width:62px;
+  height:62px;
+
+  flex-shrink:0;
+
   border-radius:50%;
-  background:#8b6f61;
+
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:24px;
-  margin-right:10px;
+
+  margin-right:13px;
+
+  font-size:25px;
+  font-weight:bold;
+
+  background:
+    linear-gradient(135deg,#ff6600,#ff9d00);
+
+  color:white;
+
+  border:2px solid rgba(255,255,255,.15);
+
+  box-shadow:
+    0 0 20px rgba(255,102,0,.35);
 }
+
+/* =========================
+   MENU
+========================= */
 
 .menu-card{
   display:flex;
+  align-items:center;
   justify-content:space-between;
-  background:#1c2b3a;
-  padding:15px;
-  margin:10px;
-  border-radius:12px;
+
+  margin:11px 10px;
+  padding:17px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(25,29,38,.95),
+      rgba(13,16,22,.95)
+    );
+
+  border:1px solid rgba(255,255,255,.06);
+
+  border-radius:15px;
+
   cursor:pointer;
+
+  transition:.2s ease;
+
+  box-shadow:0 8px 25px rgba(0,0,0,.35);
 }
 
-.logout-btn{
-  width:90%;
-  margin:20px;
-  padding:12px;
+.menu-card:hover{
+  transform:translateX(3px);
+
+  border-color:rgba(255,102,0,.4);
+
+  box-shadow:
+    0 8px 25px rgba(0,0,0,.45),
+    0 0 18px rgba(255,102,0,.1);
+}
+
+.menu-card:active{
+  transform:scale(.97);
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+button{
+  width:100%;
+
+  padding:13px 15px;
+  margin-top:9px;
+
   border:none;
-  background:red;
+  border-radius:12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ff6600,
+      #ff8a00
+    );
+
   color:white;
-  border-radius:10px;
-  font-size:16px;
+
+  font-size:15px;
+  font-weight:bold;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 5px 18px rgba(255,102,0,.2);
+
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease,
+    filter .15s ease;
 }
+
+button:hover{
+  filter:brightness(1.08);
+
+  box-shadow:
+    0 7px 22px rgba(255,102,0,.35);
+}
+
+button:active{
+  transform:scale(.96);
+}
+
+/* =========================
+   GREEN ACTION
+========================= */
+
+button.approve,
+button.success{
+  background:
+    linear-gradient(
+      135deg,
+      #00a85a,
+      #00d878
+    );
+
+  box-shadow:
+    0 5px 18px rgba(0,210,110,.18);
+}
+
+/* =========================
+   RED ACTION
+========================= */
+
+button.reject,
+.delete,
+.logout-btn{
+  background:
+    linear-gradient(
+      135deg,
+      #d41435,
+      #ff304f
+    );
+
+  box-shadow:
+    0 5px 18px rgba(255,30,70,.18);
+}
+
+/* =========================
+   LOGOUT
+========================= */
+
+.logout-btn{
+  width:calc(100% - 20px);
+
+  margin:22px 10px;
+
+  padding:14px;
+
+  font-size:15px;
+
+  border-radius:13px;
+}
+
+/* =========================
+   TEXT
+========================= */
+
 p{
-  background:#1e2a3a;
-  padding:10px;
-  border-radius:8px;
+  background:rgba(255,255,255,.035);
+
+  padding:10px 12px;
+
+  border-radius:9px;
+
   margin:8px 0;
-  color:white;
+
+  color:#ddd;
+
+  border:1px solid rgba(255,255,255,.04);
 }
+
+h1,h2,h3{
+  margin-top:0;
+}
+
+/* =========================
+   BOTTOM NAV
+========================= */
 
 .bottom-nav{
   position:fixed;
+
+  left:0;
+  right:0;
   bottom:0;
-  width:100%;
+
+  z-index:2000;
+
   display:flex;
-  background:#12263a;
+
+  padding:8px 6px;
+
+  background:rgba(8,10,15,.92);
+
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+
+  border-top:1px solid rgba(255,102,0,.22);
+
+  box-shadow:
+    0 -8px 30px rgba(0,0,0,.5);
 }
 
 .bottom-nav button{
   flex:1;
+
+  margin:0 3px;
+
+  padding:10px 5px;
+
+  background:transparent;
+
+  color:#aaa;
+
   border:none;
-  padding:12px;
-  background:#12263a;
-  color:white;
-  font-size:14px;
-}
-html, body{
-  overflow-y:auto;
+
+  box-shadow:none;
+
+  font-size:13px;
+
+  border-radius:11px;
 }
 
-body{
-  padding-bottom:80px;
+.bottom-nav button:hover{
+  background:rgba(255,102,0,.08);
+  color:#ff791c;
 }
+
+.bottom-nav button:active{
+  transform:scale(.94);
+}
+
+/* =========================
+   INPUTS
+========================= */
+
+input,
+select,
+textarea{
+  width:100%;
+
+  padding:13px 14px;
+
+  margin:7px 0;
+
+  background:#10131a;
+
+  color:white;
+
+  border:1px solid #282d38;
+
+  border-radius:11px;
+
+  outline:none;
+
+  font-size:14px;
+
+  transition:.2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:#ff6600;
+
+  box-shadow:
+    0 0 0 3px rgba(255,102,0,.08),
+    0 0 15px rgba(255,102,0,.12);
+}
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+::-webkit-scrollbar{
+  width:5px;
+}
+
+::-webkit-scrollbar-track{
+  background:#05070b;
+}
+
+::-webkit-scrollbar-thumb{
+  background:#343943;
+  border-radius:10px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+  background:#ff6600;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:480px){
+
+  .tour-card{
+    margin:12px 8px;
+    padding:16px;
+  }
+
+  .profile-card{
+    margin:12px 8px;
+  }
+
+  .menu-card{
+    margin:10px 8px;
+  }
+
+  button{
+    font-size:14px;
+  }
+
+  }
