@@ -552,22 +552,32 @@ textarea:focus{
   background:
     linear-gradient(
       135deg,
-      #833AB4 0%,
-      #C13584 35%,
-      #E1306C 60%,
-      #FD1D1D 78%,
-      #FCAF45 100%
+      #833ab4 0%,
+      #c13584 30%,
+      #e1306c 55%,
+      #fd1d1d 75%,
+      #fcb045 100%
     );
 
   box-shadow:
-    0 0 22px rgba(225,48,108,.4),
-    0 8px 25px rgba(0,0,0,.4);
+    0 0 22px rgba(225,48,108,.45),
+    0 8px 25px rgba(0,0,0,.45);
 }
 
-/* Instagram dot */
+.instagram-icon{
+  width:34px;
+  height:34px;
 
-.instagram .insta-dot{
+  fill:none;
+  stroke:white;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.instagram-icon circle:last-child{
   fill:white;
+  stroke:none;
 }
 
 /* Touch effect */
