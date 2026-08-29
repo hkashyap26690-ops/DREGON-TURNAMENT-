@@ -485,3 +485,122 @@ textarea:focus{
   }
 
   }
+/* =================================
+   📱 FLOATING SOCIAL BUTTONS
+================================= */
+
+.social-float{
+  position:fixed;
+  right:16px;
+  bottom:95px;
+
+  display:flex;
+  flex-direction:column;
+  gap:13px;
+
+  z-index:99999;
+}
+
+/* Common Button */
+
+.social-btn{
+  width:60px;
+  height:60px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:50%;
+
+  text-decoration:none;
+
+  border:3px solid rgba(255,255,255,.75);
+
+  box-shadow:
+    0 8px 25px rgba(0,0,0,.45);
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease;
+}
+
+/* Logo */
+
+.social-btn svg{
+  width:32px;
+  height:32px;
+
+  fill:white;
+
+  display:block;
+}
+
+/* Telegram */
+
+.telegram{
+  background:#229ED9;
+
+  box-shadow:
+    0 0 22px rgba(34,158,217,.45),
+    0 8px 25px rgba(0,0,0,.4);
+}
+
+/* Instagram */
+
+.instagram{
+  background:
+    linear-gradient(
+      135deg,
+      #833AB4 0%,
+      #C13584 35%,
+      #E1306C 60%,
+      #FD1D1D 78%,
+      #FCAF45 100%
+    );
+
+  box-shadow:
+    0 0 22px rgba(225,48,108,.4),
+    0 8px 25px rgba(0,0,0,.4);
+}
+
+/* Instagram dot */
+
+.instagram .insta-dot{
+  fill:white;
+}
+
+/* Touch effect */
+
+.social-btn:active{
+  transform:scale(.86);
+}
+
+/* Hover */
+
+.social-btn:hover{
+  transform:scale(1.08);
+}
+
+/* Mobile */
+
+@media(max-width:480px){
+
+  .social-float{
+    right:14px;
+    bottom:88px;
+    gap:11px;
+  }
+
+  .social-btn{
+    width:56px;
+    height:56px;
+  }
+
+  .social-btn svg{
+    width:29px;
+    height:29px;
+  }
+
+}
+
