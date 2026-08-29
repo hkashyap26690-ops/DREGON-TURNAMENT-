@@ -603,4 +603,8 @@ textarea:focus{
   }
 
 }
-
+.instagram-logo{
+  width:32px;
+  height:32px;
+  display:block;
+}
