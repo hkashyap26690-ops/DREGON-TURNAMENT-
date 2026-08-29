@@ -16,79 +16,205 @@
   <link rel="manifest" href="manifest.json">
   
 <style>
-body{
+
+  *{
+  box-sizing:border-box;
+}
+
+html,body{
   margin:0;
-  font-family:Arial;
-  height:100vh;
+  width:100%;
+  height:100%;
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
   display:flex;
   justify-content:center;
   align-items:center;
-  background:#000; /* black background */
-}
+  min-height:100vh;
+  padding:20px;
 
-/* Bigger Box */
-.login-box{
-  width:380px;
-  padding:45px;
-  background:#111;
-  border-radius:20px;
-  text-align:center;
-  box-shadow:0 0 25px rgba(255,255,255,0.1);
-}
+  background:
+    radial-gradient(circle at 20% 20%,rgba(255,102,0,.22),transparent 30%),
+    radial-gradient(circle at 80% 80%,rgba(255,0,90,.12),transparent 30%),
+    #030303;
 
-/* Title */
-.login-box h2{
-  margin-bottom:10px;
   color:white;
 }
 
-/* Subtitle */
-.login-box p{
-  font-size:13px;
-  color:#aaa;
-  margin-bottom:30px;
+/* LOGIN CARD */
+
+.login-box{
+  width:100%;
+  max-width:430px;
+
+  padding:42px 28px 32px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(25,25,30,.97),
+      rgba(9,9,12,.97)
+    );
+
+  border:1px solid rgba(255,102,0,.25);
+  border-radius:28px;
+
+  text-align:center;
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,.7),
+    0 0 35px rgba(255,102,0,.12);
+
+  position:relative;
+  overflow:hidden;
 }
 
-/* Button */
+.login-box::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:10%;
+  width:80%;
+  height:2px;
+
+  background:#ff6600;
+
+  box-shadow:
+    0 0 15px #ff6600,
+    0 0 30px #ff6600;
+}
+
+/* TITLE */
+
+.login-box h2{
+  margin:5px 0 10px;
+
+  font-size:34px;
+  font-weight:800;
+
+  color:#fff;
+
+  text-shadow:
+    0 0 15px rgba(255,255,255,.15);
+}
+
+.login-box p{
+  margin:0 0 34px;
+
+  font-size:15px;
+  color:#999;
+}
+
+/* GOOGLE BUTTON */
+
 .google-btn{
+  width:100%;
+  min-height:58px;
+
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:10px;
-  padding:14px;
-  border-radius:50px;
+
+  gap:13px;
+
+  padding:15px 20px;
+
   border:none;
+  border-radius:16px;
+
+  background:#fff;
+  color:#111;
+
+  font-size:17px;
+  font-weight:700;
+
   cursor:pointer;
-  font-weight:bold;
-  background:white;
-  color:black;
-  transition:0.3s;
-  width:100%;
+
+  box-shadow:
+    0 8px 25px rgba(0,0,0,.35);
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease;
 }
 
 .google-btn:hover{
-  transform:scale(1.05);
-  box-shadow:0 0 15px rgba(255,255,255,0.3);
+  transform:translateY(-2px);
+
+  box-shadow:
+    0 12px 30px rgba(255,255,255,.15);
 }
 
-/* Google icon */
-.google-btn img{
-  width:20px;
+.google-btn:active{
+  transform:scale(.97);
 }
+
+/* GOOGLE ICON */
+
+.google-btn img{
+  width:25px;
+  height:25px;
+
+  object-fit:contain;
+}
+
+/* BOTTOM TEXT */
 
 .small{
-  margin-top:20px;
-  font-size:11px;
+  margin-top:24px;
+
+  font-size:12px;
+
   color:#666;
 }
+
+/* MOBILE */
+
+@media(max-width:480px){
+
+  body{
+    padding:16px;
+  }
+
+  .login-box{
+    max-width:none;
+
+    padding:38px 22px 28px;
+
+    border-radius:24px;
+  }
+
+  .login-box h2{
+    font-size:30px;
+  }
+
+  .login-box p{
+    font-size:14px;
+    margin-bottom:30px;
+  }
+
+  .google-btn{
+    min-height:60px;
+    font-size:16px;
+  }
+
+  .google-btn img{
+    width:24px;
+    height:24px;
+  }
+
+}
+
 </style>
 </head>
 
 <body>
 
 <div class="login-box">
-  <h2>Welcome</h2>
-  <p>Sign in to continue</p>
+  <h2>🐉 DREGON</h2>
+<p>Sign in to continue</p>
 
   <!-- Button -->
   <button class="google-btn" onclick="login()">
